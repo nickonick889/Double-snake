@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Double Snake</title>
+    
+    <link rel="stylesheet" href="CSS/style.css">
+</head>
+<body>
+
+    <div class="game-container">
+    <h1>Double Snake</h1>
+    
+    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+        <span style="color: lime;">P1: <span id="p1-score">0</span></span>
+        <span style="color: dodgerblue;">P2: <span id="p2-score">0</span></span>
+    </div>
+
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+    <div class="controls">
+        <button onclick="setLevel(1)" class="btn easy">Easy</button>
+        <button onclick="setLevel(2)" class="btn medium">Medium</button>
+        <button onclick="setLevel(3)" class="btn hard">Hard</button>
+    </div>
+
+    <button onclick="startNewGame()" class="btn new-game">Start New Game</button>
+</div>
+
+<script src="JS/app.js"></script></body>
+</html>
