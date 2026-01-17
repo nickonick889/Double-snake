@@ -57,10 +57,10 @@ canvas {
 }
 
 /* Difficulty Colors */
-.easy { background-color: #03dac6; color: #000; }
+.easy { background-color: #00ff2a; color: #000; }
 .medium { background-color: #fb8c00; color: #000; }
-.hard { background-color: #cf6679; color: #fff; }
+.hard { background-color: #ac0423; color: #000; }
 
 .new-game { 
-    background-color: #3
+    background-color: #00eee6;
 }
