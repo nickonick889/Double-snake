@@ -28,3 +28,4 @@ As a player, I want to lose body segments if I collide with myself so that there
 Level 3: Hard Mode
 As a player, I want any collision (wall, self, or opponent) to result in an instant loss to test my precision and reflexes.
 
+The game will end and declare the winner by stating who score the higher points!
