@@ -18,46 +18,45 @@
 //7) Create Reset functionality.
 // Function that stops the timer, clears scores, and puts snakes back at start.
 
-
 /*-------------------------------- Constants --------------------------------*/
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const CANVAS_SIZE = 400;
-const INITIAL_GRID = 25; 
+const INITIAL_ROWS = 16;
+//const INITIAL_GRID = 25; 
 const INITIAL_SPEED = 300;
-
-
 /*---------------------------- Variables (state) ----------------------------*/
 let gridSize, tileCount, p1, p2, foods, obstacles, totalEaten, gameLoop;
+let currentRows = 16;
 let gameRunning = false;
 let highScore = 0;
 let showGameOver = false;
 let gameOverMessage = "";
 let p1MovedThisFrame = false;
 let p2MovedThisFrame = false;
+let gameSpeed = INITIAL_SPEED;
 
 /*-------------------------------- Functions --------------------------------*/
 function resetGame() {
-    gridSize = INITIAL_GRID;
-    tileCount = CANVAS_SIZE / gridSize;
+    currentRows = INITIAL_ROWS; 
+    gameSpeed = INITIAL_SPEED; 
+    gridSize = CANVAS_SIZE / currentRows;
+    tileCount = INITIAL_ROWS;
     totalEaten = 0;
     foods = [];
     obstacles = [];
     showGameOver = false;
-
     p1 = { body: [{x: 5, y: 5}, {x: 4, y: 5}], dx: 1, dy: 0, color: 'lime', score: 0 };
     p2 = { body: [{x: tileCount-6, y: tileCount-6}, {x: tileCount-5, y: tileCount-6}], dx: -1, dy: 0, color: 'dodgerblue', score: 0 };
-
     spawnFood(3);
     updateScoreboard();
-    draw();
 }
 
 function startNewGame() {
     resetGame();
     if (gameLoop) clearInterval(gameLoop);
     gameRunning = true;
-    gameLoop = setInterval(gameStep, INITIAL_SPEED);
+    gameLoop = setInterval(gameStep, gameSpeed); 
 }
 
 function gameStep() {
@@ -79,7 +78,6 @@ function advanceSnake(snake) {
     if (newX < 0 || newX >= tileCount || newY < 0 || newY >= tileCount) {
         return endGame(snake === p1 ? "P1 hit the wall!" : "P2 hit the wall!");
     }
-
     const head = { x: newX, y: newY };
     const foodIndex = foods.findIndex(f => f.x === head.x && f.y === head.y);
     snake.body.unshift(head);
@@ -89,21 +87,43 @@ function advanceSnake(snake) {
         snake.score += 10;
         foods.splice(foodIndex, 1);
         spawnFood(1);
-        if (totalEaten % 5 === 0) triggerEvent();
+        // if (totalEaten % 5 === 0 && foods.length < 8) {
+        //     spawnFood(2); 
+        // } else {
+        //     spawnFood(1);
+        // }
+        if (totalEaten % 5 === 0) {
+            increaseSpeed();
+            triggerEvent();
+        }
+
         updateScoreboard();
     } else {
         snake.body.pop();
     }
 }
 
-function triggerEvent() {;
-     {
-        obstacles.push({x: Math.floor(Math.random()*tileCount), y: Math.floor(Math.random()*tileCount), type: 'bomb'});
-    } 
-        // Expand: Smaller tiles make the "world" feel bigger
-        gridSize = Math.max(16, gridSize - 2); 
-        tileCount = Math.floor(CANVAS_SIZE / gridSize);
-    }
+//create a bomb an increase grid size
+function triggerEvent() {
+    obstacles.push({
+        x: Math.floor(Math.random() * tileCount), 
+        y: Math.floor(Math.random() * tileCount), 
+        type: 'bomb'
+
+});
+
+    currentRows += 2;  
+    gridSize = CANVAS_SIZE / currentRows;  
+    tileCount = currentRows;
+}
+
+function increaseSpeed() {
+    gameSpeed = Math.max(60, gameSpeed - 20);
+    clearInterval(gameLoop);
+    gameLoop = setInterval(gameStep, gameSpeed);
+    console.log("Speed Up! New Interval: " + gameSpeed + "ms");
+    updateScoreboard(); 
+}
 
 function checkCollisions() {
     if (!gameRunning) return;
@@ -128,6 +148,7 @@ function spawnFood(count) {
     for(let i=0; i<count; i++) {
         foods.push({ x: Math.floor(Math.random()*tileCount), y: Math.floor(Math.random()*tileCount) });
     }
+
 }
 
 function draw() {
@@ -142,12 +163,36 @@ function draw() {
         s.body.forEach(seg => ctx.fillRect(seg.x*gridSize, seg.y*gridSize, gridSize-2, gridSize-2));
     });
 
-    if (showGameOver) {
-        ctx.fillStyle = "rgba(0,0,0,0.85)";
-        ctx.fillRect(0,0,CANVAS_SIZE,CANVAS_SIZE);
-        ctx.fillStyle = "white"; ctx.textAlign = "center";
-        ctx.font = "bold 24px Arial"; ctx.fillText("GAME OVER", 200, 180);
-        ctx.font = "16px Arial"; ctx.fillText(gameOverMessage, 200, 210);
+   if (showGameOver) {
+        // Dark Overlay
+        ctx.fillStyle = "rgba(0, 0, 0, 0.85)";
+        ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+        ctx.textAlign = "center";
+        // Header
+        ctx.fillStyle = "#ff4d4d";
+        ctx.font = "bold 28px Arial";
+        ctx.fillText("GAME OVER", CANVAS_SIZE / 2, 140);
+        // Current Speed
+        ctx.fillStyle = "#ffcc00";
+        ctx.font = "16px Arial";
+        let finalSpeed = Math.round((INITIAL_SPEED / gameSpeed) * 100);
+        ctx.fillText("Max Speed Reached: " + finalSpeed + "%", CANVAS_SIZE / 2, 280);
+        // Reason for death
+        ctx.fillStyle = "#cccccc";
+        ctx.font = "16px Arial";
+        ctx.fillText(gameOverMessage, CANVAS_SIZE / 2, 170);
+        // FINAL SCORE (Combined)
+        ctx.fillStyle = "white";
+        ctx.font = "bold 22px Arial";
+        ctx.fillText("Final Score: " + (p1.score + p2.score), CANVAS_SIZE / 2, 220);
+        // BEST SCORE
+        ctx.fillStyle = "#bb86fc";
+        ctx.font = "18px Arial";
+        ctx.fillText("Best Score: " + highScore, CANVAS_SIZE / 2, 250);
+        // Restart Instruction
+        ctx.fillStyle = "#00eee6";
+        ctx.font = "14px Arial";
+        ctx.fillText("Press 'START SURVIVAL' to play again", CANVAS_SIZE / 2, 310);
     }
 }
 
@@ -155,6 +200,9 @@ function updateScoreboard() {
     document.getElementById('p1-score').innerText = p1.score;
     document.getElementById('p2-score').innerText = p2.score;
     document.getElementById('best-score').innerText = highScore;
+    let currentInterval = gameSpeed;
+    let speedPercent = Math.round((INITIAL_SPEED / currentInterval) * 100);
+    document.getElementById('speed-display').innerText = speedPercent + "%";
 }
 
 function endGame(msg) {
@@ -162,12 +210,22 @@ function endGame(msg) {
     showGameOver = true;
     gameOverMessage = msg;
     clearInterval(gameLoop);
-    highScore = Math.max(highScore, p1.score, p2.score);
+    const currentTotal = p1.score + p2.score;
+    if (currentTotal > highScore) {
+        highScore = currentTotal;
+    }
     updateScoreboard();
     draw();
 }
 /*----------------------------- Event Listeners -----------------------------*/
 window.addEventListener('keydown', (e) => {
+
+    const scrollingKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "];
+    
+    if (scrollingKeys.includes(e.key)) {
+        e.preventDefault(); 
+    }
+
     const key = e.key.toLowerCase();
     if (!p1MovedThisFrame) {
         if (key === 'w' && p1.dy === 0) { p1.dx = 0; p1.dy = -1; p1MovedThisFrame = true; }
@@ -181,6 +239,7 @@ window.addEventListener('keydown', (e) => {
         else if (e.key === 'ArrowLeft' && p2.dx === 0) { p2.dx = -1; p2.dy = 0; p2MovedThisFrame = true; }
         else if (e.key === 'ArrowRight' && p2.dx === 0) { p2.dx = 1; p2.dy = 0; p2MovedThisFrame = true; }
     }
+
 });
 
 resetGame();
