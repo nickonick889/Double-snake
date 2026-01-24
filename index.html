@@ -3,30 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Double Snake</title>
-    
+    <title>Double Snake Survival</title>
     <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body>
+    <main class="main-layout">
+        <div class="game-container">
+            <h1>DOUBLE SNAKE SURVIVAL</h1>
+            
+            <div class="score-container">
+                <span class="p1-score-text">P1: <span id="p1-score">0</span></span>
+                <span class="best-score-text">BEST: <span id="best-score">0</span></span>
+                <span class="p2-score-text">P2: <span id="p2-score">0</span></span>
+            </div>
 
-    <div class="game-container">
-    <h1>Double Snake</h1>
-    
-    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-        <span style="color: lime;">P1: <span id="p1-score">0</span></span>
-        <span style="color: dodgerblue;">P2: <span id="p2-score">0</span></span>
-    </div>
+            <canvas id="gameCanvas" width="400" height="400"></canvas>
 
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
+            <div class="controls">
+                <button onclick="startNewGame()" class="btn new-game">START SURVIVAL</button>
+            </div>
+        </div>
 
-    <div class="controls">
-        <button onclick="setLevel(1)" class="btn easy">Easy</button>
-        <button onclick="setLevel(2)" class="btn medium">Medium</button>
-        <button onclick="setLevel(3)" class="btn hard">Hard</button>
-    </div>
-
-    <button onclick="startNewGame()" class="btn new-game">Start New Game</button>
-</div>
-
-<script src="JS/app.js"></script></body>
+        <div class="side-panel">
+            <h2>Solo-Coop Guide</h2>
+            <div class="instruction-block">
+                <h3>Controls</h3>
+                <p><b class="p1-text">Left Hand:</b> W, A, S, D</p>
+                <p><b class="p2-text">Right Hand:</b> Arrow Keys</p>
+            </div>
+            <div class="instruction-block">
+                <h3>Challenge</h3>
+                <ul>
+                    <li>Control <b>both</b> snakes at once.</li>
+                    <li>Every 5 food eaten spawns a <b class="bomb-text">BOMB</b> or <b>EXPANDS</b> the field.</li>
+                    <li>Snakes cannot overlap or hit walls.</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+    <script src="JS/app.js"></script>
+</body>
 </html>

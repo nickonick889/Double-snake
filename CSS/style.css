@@ -1,66 +1,71 @@
-/* style.css */
 body {
-    background-color: #121212; /* Deep Dark Theme */
-    color: #e0e0e0;           /* Soft white text */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+    /* Changed to min-height and added padding to prevent cutting off top text */
+    min-height: 100vh;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    overscroll-behavior: none; 
+    overflow-x: hidden; /* Prevents side-scrolling */
+}
+
+.main-layout {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    width: 100%;
 }
 
 .game-container {
     text-align: center;
-    background-color: #1e1e1e; /* Slightly lighter panel */
-    padding: 30px;
+    background-color: #1e1e1e;
+    padding: 20px;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-h1 {
-    margin-top: 0;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-size: 1.5rem;
-    color: #bb86fc; /* Accent color for the title */
+.score-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-weight: bold;
 }
 
-/* The Playing Board */
+.p1-score-text { color: lime; }
+.p2-score-text { color: dodgerblue; }
+.best-score-text { color: #bb86fc; font-size: 1.2rem; }
+
 canvas {
-    background-color: #333333; /* Grey playing area */
-    border: 2px solid #444;
-    border-radius: 4px;
+    background-color: #222;
+    border: 3px solid #444;
     display: block;
-    margin: 20px auto;
 }
 
 .btn {
-    padding: 12px 24px;
-    margin: 5px;
+    padding: 15px 30px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
-    text-transform: uppercase;
-    transition: all 0.2s ease;
-    opacity: 0.8;
-}
-
-.btn:hover {
-    opacity: 1;
-    transform: translateY(-2px);
-}
-
-.btn:active {
-    transform: translateY(0);
-}
-
-/* Difficulty Colors */
-.easy { background-color: #00ff2a; color: #000; }
-.medium { background-color: #fb8c00; color: #000; }
-.hard { background-color: #ac0423; color: #000; }
-
-.new-game { 
     background-color: #00eee6;
+    margin-top: 15px;
+    width: 100%;
 }
+
+.side-panel {
+    background-color: #1a1a1a;
+    padding: 20px;
+    border: 1px solid #333;
+    width: 300px;
+    border-radius: 10px;
+}
+
+.instruction-block h3 { color: #00ff00; border-bottom: 1px solid #333; }
+
+
+.bomb-text { color: #ff2222; }
