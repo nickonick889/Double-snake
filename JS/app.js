@@ -24,7 +24,7 @@ const ctx = canvas.getContext('2d');
 const CANVAS_SIZE = 400;
 const INITIAL_ROWS = 16;
 //const INITIAL_GRID = 25; 
-const INITIAL_SPEED = 300;
+const INITIAL_SPEED = 400;
 /*---------------------------- Variables (state) ----------------------------*/
 let gridSize, tileCount, p1, p2, foods, obstacles, totalEaten, gameLoop;
 let currentRows = 16;
@@ -105,16 +105,23 @@ function advanceSnake(snake) {
 
 //create a bomb an increase grid size
 function triggerEvent() {
-    obstacles.push({
-        x: Math.floor(Math.random() * tileCount), 
-        y: Math.floor(Math.random() * tileCount), 
-        type: 'bomb'
+    let bombX, bombY;
+    let attempts = 0;
+    
+    do {
+        bombX = Math.floor(Math.random() * tileCount);
+        bombY = Math.floor(Math.random() * tileCount);
+        attempts++;
+        // If the board is too crowded, eventually just place it anywhere 
+        // to prevent an infinite loop
+    } while (isPositionOccupied(bombX, bombY, true) && attempts < 100);
 
-});
+    obstacles.push({ x: bombX, y: bombY, type: 'bomb' });
 
+    // Grid expansion logic
     currentRows += 2;  
     gridSize = CANVAS_SIZE / currentRows;  
-    tileCount = currentRows;
+    tileCount = Math.floor(CANVAS_SIZE / gridSize);
 }
 
 function increaseSpeed() {
@@ -145,10 +152,42 @@ function checkCollisions() {
 }
 
 function spawnFood(count) {
-    for(let i=0; i<count; i++) {
-        foods.push({ x: Math.floor(Math.random()*tileCount), y: Math.floor(Math.random()*tileCount) });
+    for (let i = 0; i < count; i++) {
+        let newX, newY;
+        let attempts = 0;
+
+        // Keep searching for a spot until isPositionOccupied returns false
+        do {
+            newX = Math.floor(Math.random() * tileCount);
+            newY = Math.floor(Math.random() * tileCount);
+            attempts++;
+            // Safety break: if the board is 100% full, don't crash the browser
+            } while (isPositionOccupied(newX, newY, false) && attempts < 100);
+        foods.push({ x: newX, y: newY });
+    }
+}
+
+function isPositionOccupied(x, y, isBomb = false) {
+    const hitP1 = p1.body.some(seg => seg.x === x && seg.y === y);
+    const hitP2 = p2.body.some(seg => seg.x === x && seg.y === y);
+    const hitFood = foods.some(f => f.x === x && f.y === y);
+    const hitBomb = obstacles.some(b => b.x === x && b.y === y);
+
+    // If we are checking for a BOMB spawn, also check the path ahead
+    let hitDangerZone = false;
+    if (isBomb) {
+        [p1, p2].forEach(snake => {
+            for (let i = 1; i <= 3; i++) {
+                let futureX = snake.body[0].x + (snake.dx * i);
+                let futureY = snake.body[0].y + (snake.dy * i);
+                if (x === futureX && y === futureY) {
+                    hitDangerZone = true;
+                }
+            }
+        });
     }
 
+    return hitP1 || hitP2 || hitFood || hitBomb || hitDangerZone;
 }
 
 function draw() {
