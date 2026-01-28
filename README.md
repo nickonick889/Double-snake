@@ -5,7 +5,8 @@ General Assembly Unit 1 Project 1
 ## User Stories
 Snake is a famous game but usually it is just about controlling one snake, hence it is a good challenge to see if you can control two snakes at once
 
-![Double Snake Survival Gameplay](./Image/screenshot.png)
+![Double Snake Survival Gameplay](https://github.com/nickonick889/Double-snake/blob/main/Image/Screenshot.png)
+
 
 As a user, I want to know how to control the 2 snakes on the screen
 
