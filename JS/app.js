@@ -47,7 +47,8 @@ function resetGame() {
     obstacles = [];
     showGameOver = false;
     p1 = { body: [{x: 5, y: 5}, {x: 4, y: 5}], dx: 1, dy: 0, color: 'lime', score: 0 };
-    p2 = { body: [{x: tileCount-6, y: tileCount-6}, {x: tileCount-5, y: tileCount-6}], dx: -1, dy: 0, color: 'dodgerblue', score: 0 };
+    p2 = { body: [{x: tileCount-6, y: tileCount-6}, {x: tileCount-5, y: tileCount-6}], 
+    dx: -1, dy: 0, color: 'dodgerblue', score: 0 };
     spawnFood(3);
     updateScoreboard();
 }
@@ -138,16 +139,21 @@ function checkCollisions() {
     const h2 = p2.body[0];
 
     // Check hit opponent
-    if (p2.body.some(s => s.x === h1.x && s.y === h1.y)) return endGame("Collision between snakes!");
-    if (p1.body.some(s => s.x === h2.x && s.y === h2.y)) return endGame("Collision between snakes!");
+    if (p2.body.some(s => s.x === h1.x && s.y === h1.y)) 
+        return endGame("Collision between snakes!");
+    if (p1.body.some(s => s.x === h2.x && s.y === h2.y)) 
+        return endGame("Collision between snakes!");
     
     // Check hit self
-    if (p1.body.slice(1).some(s => s.x === h1.x && s.y === h1.y)) return endGame("P1 bit itself!");
-    if (p2.body.slice(1).some(s => s.x === h2.x && s.y === h2.y)) return endGame("P2 bit itself!");
+    if (p1.body.slice(1).some(s => s.x === h1.x && s.y === h1.y)) 
+        return endGame("P1 bit itself!");
+    if (p2.body.slice(1).some(s => s.x === h2.x && s.y === h2.y))
+        return endGame("P2 bit itself!");
 
     // Check bombs
     obstacles.forEach(ob => {
-        if ((h1.x === ob.x && h1.y === ob.y) || (h2.x === ob.x && h2.y === ob.y)) endGame("BOOM! Hit a bomb.");
+        if ((h1.x === ob.x && h1.y === ob.y) || (h2.x === ob.x && h2.y === ob.y)) 
+            endGame("BOOM! Hit a bomb.");
     });
 }
 
@@ -194,8 +200,10 @@ function draw() {
     ctx.fillStyle = "#1e1e1e";
     ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
 
-    foods.forEach(f => { ctx.fillStyle = "#ffffff"; ctx.fillRect(f.x*gridSize, f.y*gridSize, gridSize-2, gridSize-2); });
-    obstacles.forEach(o => { ctx.fillStyle = "red"; ctx.fillRect(o.x*gridSize, o.y*gridSize, gridSize-2, gridSize-2); });
+    foods.forEach(f => { ctx.fillStyle = "#ffffff"; 
+        ctx.fillRect(f.x*gridSize, f.y*gridSize, gridSize-2, gridSize-2); });
+    obstacles.forEach(o => { ctx.fillStyle = "red"; 
+        ctx.fillRect(o.x*gridSize, o.y*gridSize, gridSize-2, gridSize-2); });
 
     [p1, p2].forEach(s => {
         ctx.fillStyle = s.color;

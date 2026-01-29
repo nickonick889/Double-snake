@@ -2,18 +2,26 @@
 General Assembly Unit 1 Project 1
 
 
-## User Stories
+## Description
 Snake is a famous game but usually it is just about controlling one snake, hence it is a good challenge to see if you can control two snakes at once
 
 ![Double Snake Survival Gameplay](https://github.com/nickonick889/Double-snake/blob/main/Image/Screenshot.png)
 
+## How To Play
+For the first snake, control it with WASD.
 
-As a user, I want to know how to control the 2 snakes on the screen
+For the second snake, control it with Arrow Keys.
 
-For the first snake, I want to control my snake with WASD.
+Any collision (wall, self, or between the snakes) will result in an instant loss to test your precision and reflexes.
 
-For the second snake, I want to control my snake with Arrow Keys.
+The game will end and show the current game score and the best score you had before, the challenge is to see who can score the higher points!
 
-As a player, any collision (wall, self, or between the snakes) to result in an instant loss to test my precision and reflexes.
+## Technologies Used
+HTML, CSS , Javascript, Vector Math
 
-The game will end and show the current game score and the best score I had before, the challenge is to see who can score the higher points!
+## Next Steps
+1. Replace setInterval with requestAnimationFrame() for much smoother, flicker-free animations.
+
+2. Improve the "Expansion" Mechanic
+
+3. Sound and Juice
