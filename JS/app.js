@@ -120,9 +120,11 @@ function triggerEvent() {
     obstacles.push({ x: bombX, y: bombY, type: 'bomb' });
 
     // Grid expansion logic
-    currentRows += 2;  
-    gridSize = CANVAS_SIZE / currentRows;  
-    tileCount = Math.floor(CANVAS_SIZE / gridSize);
+    if (currentRows < 40) {
+        currentRows += 2;  
+        gridSize = CANVAS_SIZE / currentRows;  
+        tileCount = Math.floor(CANVAS_SIZE / gridSize);
+}
 }
 
 function increaseSpeed() {
